@@ -94,7 +94,7 @@ func (cli *Client) GetUser(ctx echo.Context) (goth.User, error) {
 		return goth.User{}, err
 	}
 
-	_, err = sess.Authorize(provider, url.Values(ctx.Request().URL().QueryParams()))
+	_, err = sess.Authorize(provider, url.Values(ctx.Request().URL.Query()))
 	if err != nil {
 		return goth.User{}, err
 	}

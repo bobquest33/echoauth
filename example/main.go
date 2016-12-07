@@ -11,9 +11,9 @@ import (
 	"net/http"
 	"os"
 
-	session "github.com/ipfans/echo-session"
+	// session "github.com/ipfans/echo-session"
+	session "github.com/JamsMendez/echo-session"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/facebook"
@@ -44,16 +44,16 @@ func main() {
 	store := session.NewCookieStore([]byte("secret"))
 	serv.Use(session.Sessions("sessid", store))
 
-	serv.Get("/", func(ctx echo.Context) error {
+	serv.GET("/", func(ctx echo.Context) error {
 		return ctx.Redirect(http.StatusFound, "/auth/facebook")
 	})
-	serv.Get("/auth/:provider", oauth2Client.Begin)
-	serv.Get("/auth/:provider/callback", oauth2Client.Callback(func(user goth.User, err error, ctx echo.Context) error {
+	serv.GET("/auth/:provider", oauth2Client.Begin)
+	serv.GET("/auth/:provider/callback", oauth2Client.Callback(func(user goth.User, err error, ctx echo.Context) error {
 		return ctx.JSON(http.StatusOK, user)
 	}))
 
 	fmt.Println("Run server: http://localhost:3000")
-	serv.Run(standard.New(":3000"))
+	serv.Start(":3000")
 }
 
 ///////////////////////////////////////////////////////////////////////////////
